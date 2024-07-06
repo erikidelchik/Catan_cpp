@@ -86,6 +86,7 @@ namespace ariel{
 
 
     void Player::rollDice(Board &board,vector<Player*>& players) {
+
         random_device rd;
         mt19937 gen(rd());
 
@@ -102,7 +103,7 @@ namespace ariel{
                     for(int r=0;r<5;r++){
                         if(*player->resources[r]>=7){
                             int amountLost = *player->resources[r]/2;
-                            *player->resources[r]-= amountLost;
+                            (*player->resources[r])-= amountLost;
                             cout<<player->getName()<<" lost "<<amountLost<<" "<<resourcesNames[r]<<endl;
                             break;
                         }
@@ -113,12 +114,12 @@ namespace ariel{
         }
 
 
-        for(int i=0;i<5;i++) {
+        for(int i=0;i<board.getBoard().size();i++) {
             for (Place place: board.getBoard()[i]){
                 if(result==place.getNum()){
                     for(Buildable* b: place.getSettlements()){
                         if(b->getName()=="Settlement") {
-                            for (int r = 0; r < 5; r++) {
+                            for (int r = 0; r < resourcesNames.size(); r++) {
                                 if (place.getResourceName() == resourcesNames[r]) {
                                     for(int p=0;p<3;p++) {
                                         if(players[p]->getName()==b->getOwner()) {
@@ -166,7 +167,7 @@ namespace ariel{
                                 return;
                             }
                         }
-                        //if the player had no settlement here
+                        //if the player has no settlement here
                         cout<<"upgrade failed: "<<this->getName()<<" doest not have a settlement here\n";
                         return;
                     }
@@ -179,20 +180,19 @@ namespace ariel{
 
     }
 
-    void Player::buyCard() {
-        string cardNames[4] = {"Knight","Monopoly","freeRoads","freeResources"};
-        random_device rd;
-        mt19937 gen(rd());
+    void Player::buyCard(Catan& catan) {
 
-        uniform_int_distribution<> dist(0, 3);
-        int result =  dist(gen);
 
         if(sheep>=1 && ore>=1 && wheat>=1){
             sheep-=1;
             ore-=1;
             wheat-=1;
 
-            string card = cardNames[result];
+            string card = catan.getCardFromDeck();
+            if(card=="null"){
+                cout<<"no more cards in deck\n";
+                return;
+            }
             for(int i=0;i<cards.size();i++){
                 if(cards[i].getName()==card){
                     cards[i].addAmount();
@@ -296,6 +296,93 @@ namespace ariel{
                 cout<<getName()<<" got 1 "<<resourcesNames[r]<<endl;
             }
         }
+    }
+
+    void Player::trade(Player &other,vector<pair<string,int>> my,vector<pair<string,int>> his){
+
+        //check if i have all the items i want to trade
+        for(int i=0;i<my.size();i++){
+            for(int j=0;j<cards.size();j++){
+                if(this->cards[j].getName()==my[i].first){
+                    if(this->cards[j].getAmount()<my[i].second){
+                        cout<<this->getName()<<" doesnt have enough "<<this->cards[j].getName()<<" cards to trade\n";
+                        return;
+                    }
+                }
+            }
+
+            for(int j=0;j<resourcesNames.size();j++){
+                if(this->resourcesNames[j]==my[i].first){
+                    if((*this->resources[j])<my[i].second){
+                        cout<<this->getName()<<" doesnt have enough "<<this->resourcesNames[j]<< " to trade\n";
+                        return;
+                    }
+                }
+            }
+
+        }
+
+        //check if he have all the items he wants to trade
+        for(int i=0;i<his.size();i++){
+            for(int j=0;j<cards.size();j++){
+                if(other.cards[j].getName()==his[i].first){
+                    if(other.cards[j].getAmount()<his[i].second){
+                        cout<<other.getName()<<" doesnt have enough "<<other.cards[j].getName()<<" cards to trade\n";
+                        return;
+                    }
+                }
+            }
+
+            for(int j=0;j<resourcesNames.size();j++){
+                if(other.resourcesNames[j]==his[i].first){
+                    if((*other.resources[j])<his[i].second){
+                        cout<<other.getName()<<" doesnt have enough "<<other.resourcesNames[j]<< " to trade\n";
+                        return;
+                    }
+                }
+            }
+        }
+
+        //give my items to him
+        for(int i=0;i<my.size();i++){
+            //check if my[i] is a card
+            for(int j=0;j<cards.size();j++){
+                if(this->cards[j].getName()==my[i].first){
+                    other.cards[j].addAmount(my[i].second);
+                    this->cards[j].subAmount(my[i].second);
+                }
+            }
+
+            //check if my[i] is a resource
+            for(int j=0;j<resources.size();j++){
+                if(resourcesNames[j]==my[i].first){
+                    (*other.resources[j])+=my[i].second;
+                    (*this->resources[j])-=my[i].second;
+
+                }
+            }
+        }
+
+        //give his items to me
+        for(int i=0;i<his.size();i++){
+            //check if his[i] is a card
+            for(int j=0;j<cards.size();j++){
+                if(this->cards[j].getName()==his[i].first){
+                    this->cards[j].addAmount(his[i].second);
+                    other.cards[j].subAmount(his[i].second);
+                }
+            }
+
+            //check if his[i] is a resource
+            for(int j=0;j<resources.size();j++){
+                if(resourcesNames[j]==his[i].first){
+                    (*this->resources[j])+=his[i].second;
+                    (*other.resources[j])-=his[i].second;
+                }
+            }
+        }
+
+
     }
 
 

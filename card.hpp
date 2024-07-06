@@ -8,9 +8,8 @@ namespace ariel{
         int amount = 0;
     public:
 
-
-
         explicit Card(string name): name(name) {}
+        Card(string name,int amount): name(name),amount(amount) {}
 
         string getName() const{
             return name;
@@ -20,12 +19,12 @@ namespace ariel{
             return amount;
         }
 
-        void addAmount(){
-            amount++;
+        void addAmount(int k=1){
+            amount+=k;
         }
 
-        void subAmount(){
-            amount--;
+        void subAmount(int k=1){
+            amount-=k;
         }
 
 

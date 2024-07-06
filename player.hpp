@@ -4,11 +4,13 @@
 #include <iostream>
 #include "card.hpp"
 #include <vector>
+
 using namespace std;
 
 namespace ariel{
 
     class Board;
+    class Catan;
 
     class Player{
         string name;
@@ -36,18 +38,20 @@ namespace ariel{
         }
 
         void printCards(){
-
+            string str;
             bool haveCards = false;
             for(Card& c:cards){
                 if(c.getAmount()>0) {
                     haveCards = true;
-                    cout << c.getName() << "(" << c.getAmount() << ") ";
+                    str+= c.getName() +"(" + to_string(c.getAmount()) + ") ";
                 }
             }
-            cout<<endl;
 
             if(!haveCards){
                 cout<<getName()<<" does not have any cards\n";
+            }
+            else{
+                cout<<getName()<<"'s cards: "<<str<<endl;
             }
 
 
@@ -77,14 +81,17 @@ namespace ariel{
 
         void upgradeSettlement(Board &board,string place, int num,int side);
 
-        void trade();
 
-        void buyCard();
+        void buyCard(Catan& catan);
 
         void useFreeRoadsCard();
         void useMonopolyCard(string resourceName,vector<Player*>& players);
         void useFreeResourcesCard(string name);
         void useFreeResourcesCard(string name1,string name2);
+
+        void trade(Player &other,vector<pair<string,int>> my,vector<pair<string,int>> his);
+
+
 
     };
 
