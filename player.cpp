@@ -31,7 +31,7 @@ namespace ariel{
 
                         }
                         else{
-                            cout<<j.getSettlements()[side]->getOwner()<<" already have a settlement here";
+                            cout<<j.getSettlements()[side]->getOwner()<<" already have a settlement here\n";
                             return;
                         }
                     }

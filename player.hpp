@@ -25,13 +25,14 @@ namespace ariel{
         int sheep;
         int wheat;
         int ore;
+        int points;
+        int numberOfRoads = 0;
 
         vector<int*> resources = {&wood, &brick,&sheep,&wheat,&ore};
         vector<string> resourcesNames = {"wood","brick","sheep","wheat","ore"};
 
     public:
-        int points;
-        int numberOfRoads = 0;
+
 
         string getName() const{
             return name;
@@ -90,8 +91,6 @@ namespace ariel{
         void useFreeResourcesCard(string name1,string name2);
 
         void trade(Player &other,vector<pair<string,int>> my,vector<pair<string,int>> his);
-
-
 
     };
 
