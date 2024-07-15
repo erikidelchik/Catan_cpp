@@ -10,7 +10,6 @@ namespace ariel {
 
         Deck deck;
         vector<Player*> players;
-        Board b;
 
     public:
 
@@ -25,6 +24,7 @@ namespace ariel {
         }
 
         Board getBoard(){
+            Board b;
             return b;
         }
 

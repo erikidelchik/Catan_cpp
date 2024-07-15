@@ -12,7 +12,9 @@ namespace ariel{
         Deck(){
             deck = {Card("Knight",14),Card("Monopoly",2),Card("freeRoads",2),Card("freeResources",5)};
         }
-
+	
+	//randomly pick a card from the deck, return its name, and do -1 on the ammount.
+	//if no cards left in the deck, return the string "null"
         string getCard(){
             if(deck.empty()){
                 return "null";

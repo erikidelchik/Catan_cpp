@@ -13,7 +13,9 @@ namespace ariel{
         string name;
         string resourceName;
         int num;
+        //pointers to the roads around this place
         vector<Buildable*> roads;
+        //pointers to the settlements arount this place
         vector<Buildable*> settlements;
 
     public:

@@ -35,6 +35,4 @@ int main() {
     catan.printStats();
 
 
-
-
 }

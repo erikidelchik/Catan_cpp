@@ -23,11 +23,17 @@ namespace ariel{
                           {Hills(5),Fields(6),Pasture(11)}
         };
 
-
+	//matrix of places you can build a road at
         vector<vector<Buildable>> roadMap;
+        //create the road map
         vector<vector<Buildable>> setRoadMap();
+        //matrix of places you can build settlemets/cities at
         vector<vector<Buildable>> settlementMap;
+        //init the settlemets matrix
         vector<vector<Buildable>> setSettlementMap();
+        
+        //loop through myBoard, and initiate the pointers to roads and settlements that around this place, to point to the
+        //right index in the roadMap or the settlementMap. 
         void initBoard();
 
 
